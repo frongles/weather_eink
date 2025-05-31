@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <wchar.h>
+#include <locale.h>
 
 #include "stb_truetype.h"
 #include "eInkTools.h"
@@ -8,16 +11,23 @@
 #include "log.h"
 
 
-#include "gpioTools.h"
-
-
 
 
 
 int main(void) {
     init_display();
-    usleep(1000*1000);
-    hardware_reset();
-    
+    clear_display();
+    setlocale(LC_ALL, "");
 
+    printf("initialising font\n");
+    stbtt_fontinfo* fontinfo = init_font(UNIFONT, 32);
+    printf("Writing string\n");
+    write_string(fontinfo, 30, 64, 16, "sup nerd");
+    
+    printf("String written\n");
+    activate_display();
+
+    sleep_display();
+    free(fontinfo->data);
+    free(fontinfo);
 }

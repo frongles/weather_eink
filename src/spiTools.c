@@ -44,8 +44,7 @@ int spi_init() {
     log_msg(LOG_INFO, "Setting SPI bits per word");
     if (ioctl(spi_fd, SPI_IOC_WR_BITS_PER_WORD, &bitsPerWord) < 0){
         log_msg(LOG_ERROR, "Failed to set SPI bits per word");
-        close(spi_fd);
-        return -1;
+        exit(EXIT_FAILURE);
     }
 
     return 0;

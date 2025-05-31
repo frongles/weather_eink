@@ -138,7 +138,6 @@ int clean_gpio() {
 
 // Checks whether the busy pin is BUSY or FREE
 int is_busy() {
-    log_msg(LOG_INFO, "Checking busy pin");
     struct gpio_v2_line_values values;
     memset(&values, 0, sizeof(values));
     values.mask = 1<<2;
@@ -158,18 +157,17 @@ int is_busy() {
 
 // Waits until the busy pin is FREE
 int wait_busy() {
-    log_msg(LOG_INFO, "Waiting for busy pin");
     int count = 0;
     while (is_busy(rq_fd) == BUSY) {
-        printf("BUSY\n");
+
         count++;
         if (count >= 200) {
             log_msg(LOG_ERROR, "Busy pin timeout");
             exit(EXIT_FAILURE);
         }
-        usleep(500 * 1000);
+        usleep(50 * 1000);
     }
-
+    log_msg(LOG_INFO, "Busy wait for %d ms", count * 50);
     return 0;
 }
 

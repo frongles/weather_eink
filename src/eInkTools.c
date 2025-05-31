@@ -51,15 +51,19 @@ int init_display() {
     spi_init();
 
     hardware_reset();
-
-    write_command(0x12); // SW reset
-    usleep(10 * 1000);
     wait_busy();
+
+    log_msg(LOG_INFO, "sw reset");
+    write_command(0x12); // SW reset
+    wait_busy();
+    usleep(10 * 1000);
+
 
     write_command(0x01); // Driver output control
     write_data(0xF9); // Gate lines settings - 249 + 1
     write_data(0x00);
     write_data(0x00); // First output gate, in order 0,1,2.. from 0 - 250
+    wait_busy();
 
     write_command(0x11); // data entry mode
     write_data(0x03); // Update address in X direction, with X increment and Y increment
@@ -104,7 +108,15 @@ int activate_display() {
         }
     }
 
-    write_command(0x22); // Display update control 2
+    // Enable analog
+    // Load temp value
+    // display with display mode 1
+    // disable analog
+    // disable OSC
+    //write_data(0xF7);
+
+    write_command(0x20); // Activate display update sequence
+    wait_busy();
     return 0;
 }
 
@@ -115,8 +127,6 @@ int clear_display() {
             display[i][j] = 0xFF;
         }
     }
-
-    activate_display();
     return 0;
 }
 
@@ -133,14 +143,11 @@ int pattern_display() {
             }
         }
     }
-    activate_display();
     return 0;
 }
 
 int sleep_display() {
     log_msg(LOG_INFO, "Going to sleep");
-    //write_string(QABEXEL, 10, 3, 0, "sleep");
-    activate_display();
     write_command(0x10);
     write_data(0x03);
     return 0;
@@ -149,6 +156,7 @@ int sleep_display() {
 int cleanup() {
     log_msg(LOG_INFO, "Cleanup");
     clear_display();
+    activate_display();
     sleep_display();
     return 0;
 }
@@ -183,6 +191,7 @@ stbtt_fontinfo* init_font(char* font, int fontsize) {
 
 
 int write_char(stbtt_fontinfo *fontInfo, int fontsize, int x, int y, int *width, int *height, int character) {
+
     float scale = stbtt_ScaleForPixelHeight(fontInfo, fontsize);
     int xoff, yoff;
     *width = 0;
