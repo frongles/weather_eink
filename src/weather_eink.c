@@ -11,6 +11,7 @@
 #include "log.h"
 
 // Font paths
+// Define your own fonts here.
 #define FONTS "/home/frongles/eInkDisplay/fonts/"
 
 #define MONACO  FONTS "Monaco.ttf"
