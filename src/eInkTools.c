@@ -161,7 +161,7 @@ int cleanup() {
     return 0;
 }
 
-stbtt_fontinfo* init_font(char* font, int fontsize) {
+stbtt_fontinfo* init_font(char* font) {
     log_msg(LOG_INFO, "Initialising font");
     // Get font file and filesize
     FILE *file = fopen(font, "r");
@@ -261,7 +261,7 @@ int write_string(stbtt_fontinfo* fontInfo, int fontsize, int x, int y, char* str
         }
         if (dst[i] == L'\n') {
             length = 0;
-            x = x + height;
+            x = x - 2 * height;
             continue;
         }
         write_char(fontInfo, fontsize, x, y + length, &width, &height, dst[i]);

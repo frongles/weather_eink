@@ -8,13 +8,6 @@
 #include <stdint.h>
 
 
-// Font paths
-#define FONTS "/home/frongles/eInkDisplay/fonts/"
-
-#define MONACO  FONTS "Monaco.ttf"
-#define QABEXEL FONTS "Qabaxel-2v3el.ttf"
-#define UNIFONT FONTS "UnifontExMono.ttf"
-
 #define HEIGHT 250 // in pixels
 #define WIDTH 122 // in pixels
 #define WHITE 1
@@ -45,7 +38,7 @@ int pattern_display();
 // The display should be left in sleep mode when not in use
 int sleep_display();
 
-stbtt_fontinfo* init_font(char* font, int fontsize);
+stbtt_fontinfo* init_font(char* font);
 
 // Writes a character to the display ram with the specified font, fontsize, and x y coords.
 // char* font => file path to the .ttf font file to be used.
